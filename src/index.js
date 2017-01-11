@@ -1,6 +1,7 @@
 
 
 import alexa from  'alexa-app';
+import getMembersByAddress from './serivce-helper';
 
 // eslint-disable-next-line babel/new-cap
 const app = new alexa.app('who-are-my-congressmen');
@@ -27,12 +28,15 @@ app.intent('find by address', { slots, utterances },
                 .say(prompt)
                 .reprompt(reprompt)
                 .shouldEndSession(false);
-        } else {
-            res
-                .say(address)
-                .shouldEndSession(true)
-                .send();
+            return true;
         }
+        getMembersByAddress(address)
+            .then(({ message }) => {
+                res
+                    .say(message)
+                    .shouldEndSession(true)
+                    .send()
+            });
 
         return false;
     }
