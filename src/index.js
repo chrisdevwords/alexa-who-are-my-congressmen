@@ -15,7 +15,7 @@ const utterances =  [
     '{|of} {|congress} {|for|at} {-|ADDRESS}'
 ];
 
-app.intent('find by address', { slots, utterances },
+app.intent('FindByAddress', { slots, utterances },
 
     (req, res) => {
 
