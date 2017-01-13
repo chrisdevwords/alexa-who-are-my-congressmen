@@ -101,8 +101,10 @@ app.intent('GetContact', { slots, utterances },
                     .send();
             })
             .catch((err) => {
+                const { message } = parseErrorToMessage(err);
+                //console.log(err.stack);
                 res
-                    .say(err.message)
+                    .say(message)
                     .shouldEndSession(true)
                     .send();
             });
