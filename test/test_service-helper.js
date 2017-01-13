@@ -9,7 +9,7 @@ const { expect, config } = chai;
 
 config.includeStack = true;
 
-import getMembersByAddress from '../src/serivce-helper';
+import { getMembersByAddress } from '../src/serivce-helper';
 
 describe('The Service Helper Methods', () => {
 
@@ -17,10 +17,10 @@ describe('The Service Helper Methods', () => {
 
         it('gets a member of congress by address', (done) => {
             getMembersByAddress('45 Main St. Brooklyn')
-                .then(({ message }) => {
-                    expect(message).to.eq(
-                        'Your representative is Nydia M. Velázquez, ' +
-                        'and your senators are Kirsten E. Gillibrand and and Charles E. Schumer.'
+                .then(({ representative }) => {
+                    const { name } = representative;
+                    expect(name).to.eq(
+                        'Nydia M. Velázquez'
                     );
                     done();
                 })
