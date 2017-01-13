@@ -5,15 +5,32 @@ export const endpoint = address =>
     'https://wrrpyqpv64.execute-api.us-east-1.amazonaws.com/testing' +
     `?address=${address}`;
 
+export function senioritySort(senators) {
+    return senators.sort((a, b) =>
+        parseInt(a.seniority, 10) - parseInt(b.seniority, 10)
+    );
+}
 
-export function parseDataToMessage({ result }) {
+export function parseContactMessage({ result }) {
+    const { representative } = result;
+    const message = `The contact info for ${representative.name}, ` +
+                'is blah blah blah';
+
+    return { message };
+}
+
+export function parseDataToMessage(result) {
     const { senators, representative } = result;
+    const orderSenators = senioritySort(senators);
+
     const message = `Your representative is ${representative.name}, ` +
-                `and your senators are ${senators[0].name} and ` +
-                `and ${senators[1].name}.`;
-    return {
-        message
-    };
+                `your senior senator is ${orderSenators[1].name} and ` +
+                `your junior senator is ${orderSenators[0].name}.`;
+    return { message };
+}
+
+export function sendData({ result }) {
+    return result;
 }
 
 export function parseErrorToMessage({ error }) {
@@ -25,7 +42,7 @@ export function parseErrorToMessage({ error }) {
     }
 }
 
-export default function getMembersByAddress(address) {
+export function getMembersByAddress(address) {
     const options = {
         uri: endpoint(address),
         json: true
@@ -33,7 +50,19 @@ export default function getMembersByAddress(address) {
 
     return request
         .get(options)
-        .then(parseDataToMessage)
+        .then(sendData)
+        .catch(parseErrorToMessage);
+}
+
+export function getContactInfo(name) {
+    const options = {
+        uri: endpoint('45 Main Street, Brooklyn NY'),
+        json: true
+    };
+
+    return request
+        .get(options)
+        .then(parseContactMessage)
         .catch(parseErrorToMessage);
 }
 
