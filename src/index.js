@@ -4,6 +4,7 @@ import alexa from  'alexa-app';
 import {
     getMembersByAddress,
     parseDataToMessage,
+    parseErrorToMessage,
     getContactInfo,
     senioritySort,
 } from './serivce-helper';
@@ -48,6 +49,14 @@ app.intent('FindByAddress', { slots, utterances },
                     .say(message)
                     .shouldEndSession(false)
                     .send()
+            })
+            .catch((err) => {
+                const { message } = parseErrorToMessage(err);
+                //console.log(err.stack);
+                res
+                    .say(message)
+                    .shouldEndSession(true)
+                    .send();
             });
 
         return false;
@@ -69,7 +78,8 @@ app.intent('GetContact', { slots, utterances },
             res
                 .say(prompt)
                 .reprompt(reprompt)
-                .shouldEndSession(false);
+                .shouldEndSession(false)
+                .send();
             return true;
         }
 
@@ -88,7 +98,13 @@ app.intent('GetContact', { slots, utterances },
                 res
                     .say(message)
                     .shouldEndSession(false)
-                    .send()
+                    .send();
+            })
+            .catch((err) => {
+                res
+                    .say(err.message)
+                    .shouldEndSession(true)
+                    .send();
             });
 
         return false;

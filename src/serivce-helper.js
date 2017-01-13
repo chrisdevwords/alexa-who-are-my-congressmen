@@ -29,10 +29,6 @@ export function parseDataToMessage(result) {
     return { message };
 }
 
-export function sendData({ result }) {
-    return result;
-}
-
 export function parseErrorToMessage({ error }) {
 
     const { statusCode, message } = error;
@@ -50,8 +46,7 @@ export function getMembersByAddress(address) {
 
     return request
         .get(options)
-        .then(sendData)
-        .catch(parseErrorToMessage);
+        .then(({ result }) => result);
 }
 
 export function getContactInfo(name) {
@@ -65,4 +60,3 @@ export function getContactInfo(name) {
         .then(parseContactMessage)
         .catch(parseErrorToMessage);
 }
-
