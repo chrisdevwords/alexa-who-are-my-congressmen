@@ -1,9 +1,14 @@
 
 import request from 'request-promise-native';
 
+const API_ROOT = 'https://wrrpyqpv64.execute-api.us-east-1.amazonaws.com/testing'
+
 export const endpoint = address =>
-    'https://wrrpyqpv64.execute-api.us-east-1.amazonaws.com/testing' +
-    `?address=${address}`;
+    `${API_ROOT}?address=${address}`;
+
+export const contactEndpoint = name =>
+    `${API_ROOT}/contact?name=${name}`;
+
 
 export function senioritySort(senators) {
     return senators.sort((a, b) =>
@@ -11,11 +16,9 @@ export function senioritySort(senators) {
     );
 }
 
-export function parseContactMessage({ result }) {
-    const { representative } = result;
-    const message = `The contact info for ${representative.name}, ` +
-                'is blah blah blah';
+export function parseContactMessage({ name, contact }) {
 
+    const message = `The phone number for ${name} is ${contact.phone}`;
     return { message };
 }
 
@@ -51,10 +54,9 @@ export function getMembersByAddress(address) {
 
 export function getContactInfo(name) {
     const options = {
-        uri: endpoint('45 Main Street, Brooklyn NY'),
+        uri: contactEndpoint(encodeURI(name)),
         json: true
     };
-
     return request
         .get(options)
         .then(parseContactMessage)
