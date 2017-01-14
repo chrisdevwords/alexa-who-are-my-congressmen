@@ -74,7 +74,7 @@ app.intent('AMAZON.YesIntent', (req, res) => {
             .then(({ message }) => {
                 res
                     .say(message)
-                    .shouldEndSession(false)
+                    .shouldEndSession(true)
                     .send();
             })
             .catch((err) => {
