@@ -29,9 +29,9 @@ export function parseContactMessage(name, result) {
     return { message };
 }
 
-export function sendBulkMessage(message) {
+export function sendBulkMessage(phone, message) {
     const options = {
-        uri: smsEndpoint(encodeURI(2163347295), encodeURI(message)),
+        uri: smsEndpoint(encodeURI(phone), encodeURI(message)),
         json:true
     };
     console.log(' - bulk message sent to endpoint:', options.uri);
