@@ -5,8 +5,7 @@ import {
     getMembersByAddress,
     parseDataToMessage,
     parseErrorToMessage,
-    getContactInfo,
-    senioritySort,
+    getContactInfo
 } from './serivce-helper';
 
 // eslint-disable-next-line babel/new-cap
@@ -14,16 +13,11 @@ const app = new alexa.app('who-are-my-congressmen');
 
 const slots = {
     ADDRESS: 'AMAZON.PostalAddress',
-    POSITION: 'LIST_OF_POSITIONS'
 };
 
-let sessionData;
-
-const positionList = ['representative', 'senior senator', 'junior senator'];
-
 const utterances =  [
-    '{|representative|senator|member|congressman|congressmen} ' +
-    '{|of} {|congress} {|for|at} {-|ADDRESS}'
+    '{|my address|I live|It|It\'s} ' +
+    '{|is|at} {-|ADDRESS}'
 ];
 
 app.intent('FindByAddress', { slots, utterances },
@@ -32,6 +26,7 @@ app.intent('FindByAddress', { slots, utterances },
 
         const address = req.slot('ADDRESS');
         const reprompt = 'Tell me your address.';
+        const session = req.getSession();
 
         if (!address || !address.length) {
             const prompt = 'I didn\'t hear an address. Tell me an address.';
@@ -41,10 +36,12 @@ app.intent('FindByAddress', { slots, utterances },
                 .shouldEndSession(false);
             return true;
         }
+        session.set('address', address);
         getMembersByAddress(address)
             .then((data) => {
                 const { message } = parseDataToMessage(data);
-                sessionData = data;
+                session.set('address', address);
+                session.set('data', data);
                 res
                     .say(message)
                     .shouldEndSession(false)
@@ -63,36 +60,16 @@ app.intent('FindByAddress', { slots, utterances },
     }
 );
 
-app.intent('GetContact', { slots, utterances },
+const exitFunction = (req, res) => {
+    res.say('Goodbye!');
+};
 
-    (req, res) => {
+app.intent('AMAZON.YesIntent', (req, res) => {
+    const session = req.getSession();
+    const data = session.get('data');
+    const name = data.representative.name;
 
-        const position = req.slot('POSITION');
-        const reprompt = 'Give me your member of congress position.';
-        let name;
-
-        if (!positionList.includes(position) || !sessionData) {
-            const prompt = 'I didn\'t hear a correct position. Tell me ' +
-                'whether he or she is a junior senator, a senior senator ' +
-                'or a representative';
-            res
-                .say(prompt)
-                .reprompt(reprompt)
-                .shouldEndSession(false)
-                .send();
-            return true;
-        }
-
-        const orderSenators = senioritySort(sessionData.senators);
-
-        if (position === 'representative') {
-            name = sessionData.representative.name;
-        } else if (position === 'junior senator') {
-            name = orderSenators[0].name;
-        } else {
-            name = orderSenators[1].name;
-        }
-
+    if (data) {
         getContactInfo(name)
             .then(({ message }) => {
                 res
@@ -102,7 +79,6 @@ app.intent('GetContact', { slots, utterances },
             })
             .catch((err) => {
                 const { message } = parseErrorToMessage(err);
-                //console.log(err.stack);
                 res
                     .say(message)
                     .shouldEndSession(true)
@@ -111,7 +87,11 @@ app.intent('GetContact', { slots, utterances },
 
         return false;
     }
-);
+
+    exitFunction();
+
+    return false;
+});
 
 app.intent('AMAZON.HelpIntent', (req, res) => {
     res
@@ -123,10 +103,6 @@ app.intent('AMAZON.HelpIntent', (req, res) => {
         .send();
     return false;
 });
-
-const exitFunction = (req, res) => {
-    res.say('Goodbye!');
-};
 
 app.intent('AMAZON.StopIntent', exitFunction);
 app.intent('AMAZON.CancelIntent', exitFunction);
