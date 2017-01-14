@@ -162,7 +162,7 @@ app.intent('AMAZON.YesIntent', (req, res) => {
 
 app.intent('AMAZON.NoIntent', (req, res) => {
     res.say('This list will be here anytime you needed! thanks for taking the first step towards getting involved')
-        .shouldEndSession(false)
+        .shouldEndSession(true)
         .send();
     return false;
 });
