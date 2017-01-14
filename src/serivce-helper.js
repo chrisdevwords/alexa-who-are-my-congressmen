@@ -36,8 +36,7 @@ export function sendBulkMessage(message) {
     };
     console.log(' - bulk message sent to endpoint:', options.uri);
     return request
-        .get(options)
-        .catch(error => console.log(error.message));
+        .get(options);
 }
 
 export function parseBulkMessages(messages) {
