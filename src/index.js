@@ -29,7 +29,7 @@ const utterances =  [
 const phoneUtterances = [
     '{|my|the|} ' +
     '{|phone|number|} ' +
-    '{|is|it is| it\'s}} {-|ADDRESS}'
+    '{|is|it is| it\'s} {-|PHONE}'
 ];
 
 app.intent('FindByAddress', { slots, utterances },
@@ -85,6 +85,8 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
         const phone = req.slot('PHONE');
         const session = req.getSession();
         const data = session.get('data');
+
+        console.log('phone number is', phone);
 
         if (phone && data) {
             const { senators, representative } = data;
