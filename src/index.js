@@ -111,7 +111,7 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
                             const phoneString = phone.toString().split('').join(' ');
 
                             res
-                                .say(`Ok, I sent the list to ${phoneString}, thank you for taking the first step to getting involved`)
+                                .say(`Ok, I sent the list to ${phoneString}, thank you for taking the first step towards getting involved`)
                                 .card(card)
                                 .shouldEndSession(true)
                                 .send();
@@ -150,7 +150,7 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
 
 
 const exitFunction = (req, res) => {
-    res.say('thanks for taking the first step in getting involved');
+    res.say('thanks for taking the first step towards getting involved');
 };
 
 app.intent('AMAZON.YesIntent', (req, res) => {
@@ -161,7 +161,7 @@ app.intent('AMAZON.YesIntent', (req, res) => {
 });
 
 app.intent('AMAZON.NoIntent', (req, res) => {
-    res.say('This list will be here anytime you needed! thanks for taking the first step in getting involved')
+    res.say('This list will be here anytime you needed! thanks for taking the first step towards getting involved')
         .shouldEndSession(false)
         .send();
     return false;

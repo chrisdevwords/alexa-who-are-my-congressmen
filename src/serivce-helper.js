@@ -48,7 +48,7 @@ export function parseDataToMessage(result) {
     const { senators, representative } = result;
     const orderSenators = senioritySort(senators);
 
-    const message = 'Great, the list of representatives is as follows ' +
+    const message = 'Great, the list of representatives is as follows: ' +
             `Your representative is ${representative.name} ` +
             `${partyHash[representative.party]}, ` +
             `Your senior senator is ${orderSenators[1].name} ` +
