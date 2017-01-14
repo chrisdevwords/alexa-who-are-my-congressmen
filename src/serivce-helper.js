@@ -18,10 +18,16 @@ export function senioritySort(senators) {
     );
 }
 
-export function parseContactMessage({ name, contact }) {
+export function parseContactMessage(name, result) {
+    const message = `The phone number for ${name} is ${result.contact.phone}`
 
-    const message = `The phone number for ${name} is ${contact.phone}`;
     return { message };
+}
+
+export function parseBulkMessages(messages) {
+    const bulkMessage = messages.map(({ message }) => message).join(' ');
+
+    return bulkMessage;
 }
 
 export function parseDataToMessage(result) {
@@ -65,12 +71,12 @@ export function getContactInfo(name) {
     };
     return request
         .get(options)
-        .then(parseContactMessage)
+        .then(result => parseContactMessage(name, result))
         .catch(parseErrorToMessage);
 }
 
 export function getBulkContactMessage(names) {
     return Promise.all(
-        names.map((name) => getContactInfo(name))
-    );
+        names.map(name => getContactInfo(name))
+    )
 }
