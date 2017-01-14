@@ -108,9 +108,10 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
                     sendBulkMessage(phone, message)
                         .then((resp) => {
                             console.log('-- bulk message sent');
+                            const phoneString = phone.toString().split('').join(' ');
 
                             res
-                                .say(`Ok, your information was texted to ${phone}`)
+                                .say(`Ok, your information was texted to ${phoneString}`)
                                 .card(card)
                                 .shouldEndSession(true)
                                 .send();
