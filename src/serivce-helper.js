@@ -1,7 +1,7 @@
 
 import request from 'request-promise-native';
 
-const API_ROOT = 'https://wrrpyqpv64.execute-api.us-east-1.amazonaws.com/testing'
+const API_ROOT = 'https://wrrpyqpv64.execute-api.us-east-1.amazonaws.com/testing';
 
 export const endpoint = address =>
     `${API_ROOT}?address=${address}`;
@@ -28,7 +28,8 @@ export function parseDataToMessage(result) {
 
     const message = `Your representative is ${representative.name}, ` +
                 `your senior senator is ${orderSenators[1].name} and ` +
-                `your junior senator is ${orderSenators[0].name}.`;
+                `your junior senator is ${orderSenators[0].name}.` +
+                'Would you like me to send you their contact information?';
     return { message };
 }
 
