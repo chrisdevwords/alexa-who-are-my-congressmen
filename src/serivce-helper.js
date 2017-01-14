@@ -68,3 +68,9 @@ export function getContactInfo(name) {
         .then(parseContactMessage)
         .catch(parseErrorToMessage);
 }
+
+export function getBulkContactMessage(names) {
+    return Promise.all(
+        names.map((name) => getContactInfo(name))
+    );
+}
