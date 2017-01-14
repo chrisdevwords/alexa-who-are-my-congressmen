@@ -5,7 +5,8 @@ import {
     getMembersByAddress,
     parseDataToMessage,
     parseErrorToMessage,
-    getContactInfo
+    getBulkContactMessage,
+    parseBulkMessages
 } from './serivce-helper';
 
 // eslint-disable-next-line babel/new-cap
@@ -67,11 +68,18 @@ const exitFunction = (req, res) => {
 app.intent('AMAZON.YesIntent', (req, res) => {
     const session = req.getSession();
     const data = session.get('data');
-    const name = data.representative.name;
 
     if (data) {
-        getContactInfo(name)
-            .then(({ message }) => {
+        const { senators, representative } = data;
+        const names = [
+            representative.name,
+            senators[0].name,
+            senators[1].name
+        ];
+
+        getBulkContactMessage(names)
+            .then(parseBulkMessages)
+            .then((message) => {
                 res
                     .say(message)
                     .shouldEndSession(true)
