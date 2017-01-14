@@ -14,12 +14,22 @@ import {
 const app = new alexa.app('who-are-my-congressmen');
 
 const slots = {
-    ADDRESS: 'AMAZON.PostalAddress',
+    ADDRESS: 'AMAZON.PostalAddress'
 };
+
+const phoneSlots = {
+    PHONE: 'NUMBER'
+}
 
 const utterances =  [
     '{|my address|I live|It|It\'s} ' +
     '{|is|at} {-|ADDRESS}'
+];
+
+const phoneUtterances = [
+    '{|my|the|} ' +
+    '{|phone|number|} ' +
+    '{|is|it is| it\'s}} {-|ADDRESS}'
 ];
 
 app.intent('FindByAddress', { slots, utterances },
@@ -69,68 +79,84 @@ app.intent('FindByAddress', { slots, utterances },
     }
 );
 
+app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
+    (req, res) => {
+
+        const phone = req.slot('PHONE');
+        const session = req.getSession();
+        const data = session.get('data');
+
+        if (phone && data) {
+            const { senators, representative } = data;
+            const names = [
+                representative.name,
+                senators[0].name,
+                senators[1].name
+            ];
+
+            getBulkContactMessage(names)
+                .then(parseBulkMessages)
+                .then((message) => {
+                    const card = {
+                        type: 'Simple',
+                        title: 'Their Contact Info',
+                        content: message
+                    }
+                    console.log('-- sending bulk message');
+                    sendBulkMessage(phone, message)
+                        .then((resp) => {
+                            console.log('-- bulk message sent');
+
+                            res
+                                .say(`Ok, your information was texted to ${phone}`)
+                                .card(card)
+                                .shouldEndSession(true)
+                                .send();
+                        })
+                        .catch((err) => {
+                            console.log('-- error sending bulk message', err);
+                            res
+                                .say('There was an error sending the text')
+                                .say(message)
+                                .card(card)
+                                .shouldEndSession(true)
+                                .send();
+                        })
+
+                })
+                .catch((err) => {
+                    const { message } = parseErrorToMessage(err);
+                    res
+                        .say(message)
+                        .shouldEndSession(true)
+                        .send();
+                });
+            return false;
+        }
+
+        const prompt = 'I didn\'t hear a phone number. Tell me a phone number.';
+        const reprompt = 'Tell me your phone number.';
+
+        res
+            .say(prompt)
+            .reprompt(reprompt)
+            .shouldEndSession(false);
+        return true;
+    }
+);
+
+
 const exitFunction = (req, res) => {
     res.say('Goodbye!');
 };
 
 app.intent('AMAZON.YesIntent', (req, res) => {
-    const session = req.getSession();
-    const data = session.get('data');
-
-    if (data) {
-        const { senators, representative } = data;
-        const names = [
-            representative.name,
-            senators[0].name,
-            senators[1].name
-        ];
-
-        getBulkContactMessage(names)
-            .then(parseBulkMessages)
-            .then((message) => {
-                const card = {
-                    type: 'Simple',
-                    title: 'Their Contact Info',
-                    content: message
-                }
-                console.log('-- sending bulk message');
-                sendBulkMessage(message)
-                    .then((resp) => {
-                        console.log('-- bulk message sent');
-
-                        res
-                            .say(message)
-                            .card(card)
-                            .shouldEndSession(true)
-                            .send();
-                    })
-                    .catch((err => {
-                        console.log('-- error sending bulk message', err);
-                        res
-                            .say('There was an error sending the text')
-                            .say(message)
-                            .card(card)
-                            .shouldEndSession(true)
-                            .send();
-
-                    }))
-
-            })
-            .catch((err) => {
-                const { message } = parseErrorToMessage(err);
-                res
-                    .say(message)
-                    .shouldEndSession(true)
-                    .send();
-            });
-
-        return false;
-    }
-
-    exitFunction();
-
+    res.say('Ok, please give me your phone number')
+        .shouldEndSession(false)
+        .send();
     return false;
 });
+
 
 app.intent('AMAZON.HelpIntent', (req, res) => {
     res
