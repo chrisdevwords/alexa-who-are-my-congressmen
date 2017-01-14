@@ -34,7 +34,7 @@ export function sendBulkMessage(message) {
         uri: smsEndpoint(encodeURI(2163347295), encodeURI(message)),
         json:true
     };
-
+    console.log(' - bulk message sent to endpoint:', options.uri);
     return request
         .get(options)
         .catch(error => console.log(error.message));
