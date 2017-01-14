@@ -2,6 +2,13 @@ Alexa, who are my Congressmen?
 ========================================
 An Alexa skill for finding information on your members of Congress. 
 
+[![CircleCI](https://circleci.com/gh/chrisdevwords/alexa-who-are-my-congressmen/tree/master.svg?style=shield&nocache=1)](https://circleci.com/gh/chrisdevwords/alexa-who-are-my-congressmen/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/chrisdevwords/alexa-who-are-my-congressmen/badge.svg?branch=master&nocache=1)](https://coveralls.io/github/chrisdevwords/alexa-who-are-my-congressmen?branch=master)
+[![Dependency Status](https://david-dm.org/chrisdevwords/alexa-who-are-my-congressmen.svg)](https://david-dm.org/chrisdevwords/alexa-who-are-my-congressmen)
+[![Dev Dependency Status](https://david-dm.org/chrisdevwords/alexa-who-are-my-congressmen/dev-status.svg)](https://david-dm.org/chrisdevwords/alexa-who-are-my-congressmen?type=dev)
+[![Known Vulnerabilities](https://snyk.io/test/github/chrisdevwords/alexa-who-are-my-congressmen/badge.svg)](https://snyk.io/test/github/chrisdevwords/alexa-who-are-my-congressmen)
+
+
 Requirements
 ------------
 * Requires Node v4.3.2 
