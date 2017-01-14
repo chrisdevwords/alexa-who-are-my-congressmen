@@ -6,7 +6,8 @@ import {
     parseDataToMessage,
     parseErrorToMessage,
     getBulkContactMessage,
-    parseBulkMessages
+    parseBulkMessages,
+    sendBulkMessage
 } from './serivce-helper';
 
 // eslint-disable-next-line babel/new-cap
@@ -92,7 +93,8 @@ app.intent('AMAZON.YesIntent', (req, res) => {
                     title: 'Their Contact Info',
                     content: message
                 }
-
+                sendBulkMessage(message)
+                    .catch(console.log);
                 res
                     .say(message)
                     .card(card)

@@ -42,8 +42,6 @@ export function sendBulkMessage(message) {
 
 export function parseBulkMessages(messages) {
     const bulkMessage = messages.map(({ message }) => message).join(' ');
-
-    sendBulkMessage(bulkMessage);
     return bulkMessage;
 }
 
