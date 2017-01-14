@@ -93,8 +93,13 @@ app.intent('AMAZON.YesIntent', (req, res) => {
                     title: 'Their Contact Info',
                     content: message
                 }
+                console.log('-- sending bulk message');
                 sendBulkMessage(message)
-                    .catch(console.log);
+                    .catch(console.log)
+                    .then((resp) => {
+                        console.log(' -- bulk message callback ', resp);
+                    });
+                console.log('-- bulk message sent');
                 res
                     .say(message)
                     .card(card)
