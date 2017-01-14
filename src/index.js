@@ -95,16 +95,26 @@ app.intent('AMAZON.YesIntent', (req, res) => {
                 }
                 console.log('-- sending bulk message');
                 sendBulkMessage(message)
-                    .catch(console.log)
                     .then((resp) => {
-                        console.log(' -- bulk message callback ', resp);
-                    });
-                console.log('-- bulk message sent');
-                res
-                    .say(message)
-                    .card(card)
-                    .shouldEndSession(true)
-                    .send();
+                        console.log('-- bulk message sent');
+
+                        res
+                            .say(message)
+                            .card(card)
+                            .shouldEndSession(true)
+                            .send();
+                    })
+                    .catch((err => {
+                        console.log('-- error sending bulk message', err);
+                        res
+                            .say('There was an error sending the text')
+                            .say(message)
+                            .card(card)
+                            .shouldEndSession(true)
+                            .send();
+
+                    }))
+
             })
             .catch((err) => {
                 const { message } = parseErrorToMessage(err);
