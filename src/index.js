@@ -111,7 +111,7 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
                             const phoneString = phone.toString().split('').join(' ');
 
                             res
-                                .say(`Ok, your information was texted to ${phone}`)
+                                .say(`Ok, your information was texted to ${phoneString}`)
                                 .card(card)
                                 .shouldEndSession(true)
                                 .send();
