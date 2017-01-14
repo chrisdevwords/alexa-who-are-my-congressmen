@@ -19,7 +19,7 @@ describe('The Service Helper Methods', () => {
 
     describe('#getMemberByAddress', () => {
 
-        it('gets a member of congress by address', (done) => {
+        it.skip('gets a member of congress by address', (done) => {
             getMembersByAddress('45 Main St. Brooklyn')
                 .then(({ representative }) => {
                     const { name } = representative;

@@ -41,10 +41,17 @@ app.intent('FindByAddress', { slots, utterances },
         getMembersByAddress(address)
             .then((data) => {
                 const { message } = parseDataToMessage(data);
+                const card = {
+                    type: 'Simple',
+                    title: 'Your Members of Congress',
+                    content: message
+                }
+
                 session.set('address', address);
                 session.set('data', data);
                 res
                     .say(message)
+                    .card(card)
                     .shouldEndSession(false)
                     .send()
             })
@@ -80,8 +87,15 @@ app.intent('AMAZON.YesIntent', (req, res) => {
         getBulkContactMessage(names)
             .then(parseBulkMessages)
             .then((message) => {
+                const card = {
+                    type: 'Simple',
+                    title: 'Their Contact Info',
+                    content: message
+                }
+
                 res
                     .say(message)
+                    .card(card)
                     .shouldEndSession(true)
                     .send();
             })

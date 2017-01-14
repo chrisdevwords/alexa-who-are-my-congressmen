@@ -53,7 +53,7 @@ export function parseDataToMessage(result) {
 
     const message = `Your representative is ${representative.name} ` +
             `${partyHash[representative.party]}, ` +
-            `Your senior senator is ${orderSenators[1].name}` +
+            `Your senior senator is ${orderSenators[1].name} ` +
             `${partyHash[orderSenators[1].party]}, and ` +
             `Your junior senator is ${orderSenators[0].name} ` +
             `${partyHash[orderSenators[0].party]}. ` +
