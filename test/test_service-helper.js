@@ -11,7 +11,8 @@ config.includeStack = true;
 
 import {
     getMembersByAddress,
-    getBulkContactMessage
+    getBulkContactMessage,
+    sendBulkMessage
 } from '../src/serivce-helper';
 
 describe('The Service Helper Methods', () => {
@@ -31,8 +32,24 @@ describe('The Service Helper Methods', () => {
         });
     });
 
+    describe('send SMS message', () => {
+
+        context('with a valid message', () => {
+            it('sends a valid message', (done) => {
+                sendBulkMessage('Marco Rubio here! I am a lego figure')
+                    .then((result) => {
+                        expect(result.code).to.eq(200);
+                        done();
+                    })
+                    .catch(done);
+            });
+        });
+    });
+
+
     describe('#getBulkContactMessage', () => {
-        context('with 3 members of congress', (done) => {
+        context('with 3 members of congress', () => {
+            
             it('resolves with a message of multiple contacts', (done) => {
                 getBulkContactMessage(['Nydia M. Velázquez', 'Mike Doyle', 'Mitch McConnel'])
                     .then((contacts) => {
@@ -78,7 +95,6 @@ describe('The Service Helper Methods', () => {
 
             })
         });
-
 
     })
 });

@@ -3,7 +3,12 @@ import request from 'request-promise-native';
 
 const API_ROOT = 'https://wrrpyqpv64.execute-api.us-east-1.amazonaws.com/testing';
 
+const SMS_ROOT = 'https://l40zel7jme.execute-api.us-east-1.amazonaws.com/prod';
+
 const partyHash = { D: 'a Democrat', R: 'a Republican', I: 'an Independent' };
+
+export const smsEndpoint = (number, message) =>
+    `${SMS_ROOT}/SMS-Twilio?to=${number}&message=${message}`;
 
 export const endpoint = address =>
     `${API_ROOT}?address=${address}`;
@@ -24,9 +29,21 @@ export function parseContactMessage(name, result) {
     return { message };
 }
 
+export function sendBulkMessage(message) {
+    const options = {
+        uri: smsEndpoint(encodeURI(2163347295), encodeURI(message)),
+        json:true
+    };
+
+    return request
+        .get(options)
+        .catch(error => console.log(error.message));
+}
+
 export function parseBulkMessages(messages) {
     const bulkMessage = messages.map(({ message }) => message).join(' ');
 
+    sendBulkMessage(bulkMessage);
     return bulkMessage;
 }
 
