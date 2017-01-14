@@ -19,7 +19,7 @@ describe('The Service Helper Methods', () => {
 
     describe('#getMemberByAddress', () => {
 
-        it.skip('gets a member of congress by address', (done) => {
+        it('gets a member of congress by address', (done) => {
             getMembersByAddress('45 Main St. Brooklyn')
                 .then(({ representative }) => {
                     const { name } = representative;
@@ -34,7 +34,7 @@ describe('The Service Helper Methods', () => {
 
     describe('send SMS message', () => {
 
-        context('with a valid message', () => {
+        context.skip('with a valid message', () => {
             it('sends a valid message', (done) => {
                 sendBulkMessage('Marco Rubio here! I am a lego figure')
                     .then((result) => {
