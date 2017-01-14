@@ -48,13 +48,14 @@ export function parseDataToMessage(result) {
     const { senators, representative } = result;
     const orderSenators = senioritySort(senators);
 
-    const message = `Your representative is ${representative.name} ` +
+    const message = 'Great, the list of representatives is as follows ' +
+            `Your representative is ${representative.name} ` +
             `${partyHash[representative.party]}, ` +
             `Your senior senator is ${orderSenators[1].name} ` +
             `${partyHash[orderSenators[1].party]}, and ` +
             `Your junior senator is ${orderSenators[0].name} ` +
             `${partyHash[orderSenators[0].party]}. ` +
-            'Would you like me to send you their contact information?';
+            'Would you like me to text you their contact information?';
     return { message };
 }
 

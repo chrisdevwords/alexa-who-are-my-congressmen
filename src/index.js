@@ -37,15 +37,15 @@ app.intent('FindByAddress', { slots, utterances },
     (req, res) => {
 
         const address = req.slot('ADDRESS');
-        const reprompt = 'Tell me your address.';
+        const reprompt = 'Please tell me your address.';
         const session = req.getSession();
 
         if (!address || !address.length) {
-            const prompt = 'I didn\'t hear an address. Tell me an address.';
+            const prompt = 'I didn\'t hear an address. Please tell me an address.';
             res
                 .say(prompt)
                 .reprompt(reprompt)
-                .shouldEndSession(false);
+                .shouldEndSession(true);
             return true;
         }
         session.set('address', address);
@@ -111,7 +111,7 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
                             const phoneString = phone.toString().split('').join(' ');
 
                             res
-                                .say(`Ok, your information was texted to ${phoneString}`)
+                                .say(`Ok, I sent the list to ${phoneString}, thank you for taking the first step to getting involved`)
                                 .card(card)
                                 .shouldEndSession(true)
                                 .send();
@@ -150,11 +150,18 @@ app.intent('GetPhoneNumber', { slots: phoneSlots, utterances: phoneUtterances },
 
 
 const exitFunction = (req, res) => {
-    res.say('Goodbye!');
+    res.say('thanks for taking the first step in getting involved');
 };
 
 app.intent('AMAZON.YesIntent', (req, res) => {
-    res.say('Ok, please give me your phone number')
+    res.say('Please give me your phone number.')
+        .shouldEndSession(false)
+        .send();
+    return false;
+});
+
+app.intent('AMAZON.NoIntent', (req, res) => {
+    res.say('This list will be here anytime you needed! thanks for taking the first step in getting involved')
         .shouldEndSession(false)
         .send();
     return false;
@@ -176,8 +183,8 @@ app.intent('AMAZON.StopIntent', exitFunction);
 app.intent('AMAZON.CancelIntent', exitFunction);
 
 app.launch((req, res) => {
-    const prompt = 'For information on your members of congress, ' +
-            'tell me your address.';
+    const prompt = 'Hi, I am Waldo. I am happy to connect you with your members of congress. ' +
+            'First, please tell me your address.';
     res
         .say(prompt)
         .reprompt(prompt)
